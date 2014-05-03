@@ -5,6 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Database connection info
+var mongo = require('mongoskin');
+var mongoUri = process.env.MONGOHQ_URL;
+var db = mongo.db(mongoUri);
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -20,6 +25,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+    req.db = db;
+    next();
+});
 
 app.use('/', routes);
 app.use('/users', users);
