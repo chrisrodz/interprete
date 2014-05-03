@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 Reserve an interpreter
+  h3 Please select the date and time you want to reserve
+  form#reservationForm
+    input#selector(type='text')
+    button(type='submit') Confirm
+
+block script
+  script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
+  script(src='/javascripts/vendor/timepickeraddon.js')
+  script(src='/javascripts/reservations.js')

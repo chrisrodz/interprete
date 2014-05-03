@@ -10,8 +10,10 @@ var mongo = require('mongoskin');
 var mongoUri = process.env.MONGOHQ_URL || 'mongodb://localhost:27017/interpretelocal';
 var db = mongo.db(mongoUri);
 
+// Routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var reservations = require('./routes/reservations');
 
 var app = express();
 
@@ -33,6 +35,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/reservations', reservations);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
