@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Database connection info
 var mongo = require('mongoskin');
-var mongoUri = process.env.MONGOHQ_URL;
+var mongoUri = process.env.MONGOHQ_URL || 'mongodb://localhost:27017/interpretelocal';
 var db = mongo.db(mongoUri);
 
 var routes = require('./routes/index');
