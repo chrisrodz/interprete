@@ -5,10 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// Database connection info
+// Database
 var mongo = require('mongoskin');
 var mongoUri = process.env.MONGOHQ_URL || 'mongodb://localhost:27017/interpretelocal';
 var db = mongo.db(mongoUri);
+
+// Sendgrid for emails
+var sendgrid = require('sendgrid')(process.env.SG_USER, process.env.SG_PASSWORD);
 
 // Routes
 var routes = require('./routes/index');
@@ -28,8 +31,15 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Database
 app.use(function(req, res, next) {
     req.db = db;
+    next();
+});
+
+// Sendgrid for emails
+app.use(function(req, res, next) {
+    res.sendgrid = sendgrid
     next();
 });
 

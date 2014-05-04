@@ -2,12 +2,12 @@ jQuery(document).ready(function($) {
   $('#dateSelector').datepicker();
 
   $('#beginTimeSelector').timepicker({
-    stepMinute: 30,
+    stepMinute: 5,
     timeFormat: 'hh:mm tt'
   });
 
   $('#endTimeSelector').timepicker({
-    stepMinute: 30,
+    stepMinute: 5,
     timeFormat: 'hh:mm tt'
   });
 
@@ -19,33 +19,38 @@ jQuery(document).ready(function($) {
 
 function reserveDate(event) {
   event.preventDefault();
-  
+
   var reservationDate = $('#dateSelector').val();
   // TODO: Validate that end time is greater than begin time
   var reservationBeginTime = $('#beginTimeSelector').val();
   var reservationEndTime = $('#endTimeSelector').val();
 
-  var reservationData = {
-    'reservationDate': reservationDate,
-    'beginTime': reservationBeginTime,
-    'endTime': reservationEndTime,
-    'userId': localStorage.userId
-  }
+  var confirmed = confirm('Save reservation for: ' + reservationDate
+    + ' from: ' + reservationBeginTime + ' to: ' + reservationEndTime + '?');
 
-  if (reservationDate !== null) {
-    $.ajax({
-      type: 'POST',
-      url: '/reservations/add',
-      data: reservationData,
-      dataType: 'JSON'
-    }).done(function(res) {
-      if (res.msg === '') {
-        console.log("Reservation success!");
-        getReservations(localStorage.userId);
-      } else{
-        console.log("Error: " + res.msg);
-      };
-    });
+  if (confirmed) {
+    var reservationData = {
+      'reservationDate': reservationDate,
+      'beginTime': reservationBeginTime,
+      'endTime': reservationEndTime,
+      'userId': localStorage.userId
+    }
+
+    if (reservationDate !== null) {
+      $.ajax({
+        type: 'POST',
+        url: '/reservations/add',
+        data: reservationData,
+        dataType: 'JSON'
+      }).done(function(res) {
+        if (res.msg === '') {
+          console.log("Reservation success!");
+          getReservations(localStorage.userId);
+        } else{
+          console.log("Error: " + res.msg);
+        };
+      });
+    };
   };
 }
 
