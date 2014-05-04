@@ -15,4 +15,11 @@ router.post('/add', function(req, res) {
   });
 });
 
+router.get('/get/:id', function(req, res) {
+  var db = req.db;
+  db.collection('reservations').find({userId: req.params.id}).toArray(function(err, items) {
+    res.json(items);
+  });
+});
+
 module.exports = router;

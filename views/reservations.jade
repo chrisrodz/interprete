@@ -4,8 +4,16 @@ block content
   h1 Reserve an interpreter
   h3 Please select the date and time you want to reserve
   form#reservationForm
-    input#selector(type='text')
+    input#dateSelector(type='text', placeholder='Reservation Date')
+    br
+    input#beginTimeSelector(type='text', placeholder='From what time?')
+    br
+    input#endTimeSelector(type='text', placeholder='To what time?')
+    br
     button(type='submit') Confirm
+  h3 Your reservations
+  #userReservations
+    ul
 
 block script
   script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
