@@ -16,6 +16,7 @@
     "mongodb": "^1.4.3",
     "mongoskin": "^1.4.1",
     "morgan": "~1.0.0",
+    "password-generator": "^0.2.2",
     "pwd": "0.0.3",
     "sendgrid": "1.0.3",
     "static-favicon": "~1.0.0"
