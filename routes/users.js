@@ -28,14 +28,14 @@ router.get('/userlist', restrict, function(req, res) {
 });
 
 /* GET New User page. */
-router.get('/newuser', function(req, res, sendgrid) {
+router.get('/newuser', restrict, function(req, res, sendgrid) {
     res.render('newuser', { title: 'Add New User' });
 });
 
 /*
  * POST to adduser.
  */
-router.post('/adduser', function(req, res) {
+router.post('/adduser', restrict, function(req, res) {
     var db = req.db;
 
     var newUser = req.body;
@@ -113,16 +113,5 @@ router.get('/confirm/:userid', function(req, res) {
   });
 });
 
-
-/*
- * DELETE to deleteuser.
- */
-router.delete('/deleteuser/:id', function(req, res) {
-    var db = req.db;
-    var userToDelete = req.params.id;
-    db.collection('usercollection').removeById(userToDelete, function(err, result) {
-        res.send((result === 1) ? { msg: '' } : { msg:'error: ' + err });
-    });
-});
 
 module.exports = router;
