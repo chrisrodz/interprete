@@ -8,7 +8,15 @@ var sendgrid  = require('sendgrid')('makobi', 'culo1124estupido');
 // Password hashing
 var pwd = require('pwd');
 
-router.get('/userlist', function(req, res) {
+function restrict (req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('login');
+    };
+}
+
+router.get('/userlist', restrict, function(req, res) {
     if (req.session.user) {
       res.json(req.session.user)
     } else {
