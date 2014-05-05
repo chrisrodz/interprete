@@ -39,12 +39,7 @@ router.post('/add', restrict, function(req, res) {
 
 router.get('/get', restrict, function(req, res) {
   var db = req.db;
-  db.collection('reservations').find({})
-});
-
-router.get('/get/:id', restrict, function(req, res) {
-  var db = req.db;
-  db.collection('reservations').find({userId: req.params.id}).toArray(function(err, items) {
+  db.collection('reservations').find({user_id: db.ObjectID.createFromHexString(req.session.user._id)}).toArray(function(err, items) {
     res.json(items);
   });
 });
