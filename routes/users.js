@@ -14,7 +14,7 @@ function restrict (req, res, next) {
     } else {
         res.redirect('login');
     };
-}
+} 
 
 router.get('/userlist', restrict, function(req, res) {
     if (req.session.user) {
@@ -81,18 +81,22 @@ router.post('/login', function(req, res) {
   var userEmail = req.body.email;
 
   db.collection('usercollection').find({"email": userEmail}).toArray(function(err, items) {
-    
-    var user = items[0];
-    pwd.hash(req.body.password, user.salt, function(pwderr, hash) {
-      if (hash == user.password) {
-        req.session.regenerate(function() {
-            req.session.user = user;
-            res.redirect('userList');
-        });
-      } else {
-        res.json({msg: "Invalid login"});
-      };
-    });
+    if (err || items.length < 1) {
+      res.render('login', {msg: "Invalid login. Please try again."});
+      return;
+    } else {
+      var user = items[0];
+      pwd.hash(req.body.password, user.salt, function(pwderr, hash) {
+        if (hash == user.password) {
+          req.session.regenerate(function() {
+              req.session.user = user;
+              res.redirect('/reservations');
+          });
+        } else {
+          res.render('login', {msg: "Invalid login. Please try again."});
+        };
+      });
+    }
   });
 });
 
