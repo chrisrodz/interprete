@@ -11,6 +11,9 @@ var mongo = require('mongoskin');
 var mongoUri = process.env.MONGOHQ_URL  || 'mongodb://localhost:27017/interpretelocal';
 var db = mongo.db(mongoUri);
 
+db.ObjectID = mongo.ObjectID;
+
+
 //Local
 //var db = mongo.db("mongodb://localhost:27017/interprete", {native_parser:true});
 

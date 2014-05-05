@@ -54,7 +54,7 @@ router.post('/adduser', function(req, res) {
           to:       newUser.email,
           from:     'christian.etpr10@gmail.com',
           subject:  'interprete',
-          text:     'Created a user in interprete app.'
+          text:     'Created a user in interprete app. Confirm user at this link: http://localhost:3000/users/confirm' + result[0]._id
         }, function(err, json) {
           if (err) { return console.error(err); }
           console.log(json);
@@ -93,6 +93,23 @@ router.post('/login', function(req, res) {
         res.json({msg: "Invalid login"});
       };
     });
+  });
+});
+
+/*
+* GET User confirmation page. He gets here through email.
+*/
+router.get('/confirm/:userid', function(req, res) {
+  var db = req.db;
+  db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.params.userid)}, function(err, user) {
+    console.log(user);
+    if (!user || err) {
+      res.redirect('/users/newuser');
+    } else{
+      db.collection('usercollection').update({_id: user._id}, {$set: {accountIsActive: true}}, function(err) {
+        res.redirect('/users/login');
+      });
+    };
   });
 });
 
