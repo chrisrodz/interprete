@@ -1,9 +1,21 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to our test
+	a(href='/users/userinfo') Profile
+	br
+	a(href='/reservations') Reservations
 
+	ol
+		li
+			h3 Explain Calendar View
+		li
+			h3 Explain how to reserve dates in calendar
+		li
+			h3 Explain how reminders work
+		li
+			h3 Explain how to use camera View
+		li
+			h3 Explain how to buy hours
 
 block script
-  script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
+	script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
