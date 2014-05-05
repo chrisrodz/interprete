@@ -42,12 +42,10 @@ function reserveDate(event) {
         data: reservationData,
         dataType: 'JSON'
       }).done(function(res) {
-        if (res.msg === '') {
           console.log("Reservation success!");
+          $('#availableHours').html(res.msg);
+          console.log(res.msg);
           getReservations();
-        } else{
-          console.log("Error: " + res.msg);
-        };
       });
     };
   };

@@ -26,7 +26,7 @@ router.post('/add', restrict, function(req, res) {
   var consumedHours = (Math.abs(moment(req.body.beginTime, "HH:mm a").diff(moment(req.body.endTime, "HH:mm a"))))/3600000;
 
   if (consumedHours > req.session.user.availableHours) {
-    res.send({msg: 'Not enough hours'});
+    res.render('/', {msg: 'Not enough hours'});
   } else{
     db.collection('reservations').insert(reservationInfo, function(err, result) {
       res.sendgrid.send({
@@ -41,10 +41,13 @@ router.post('/add', restrict, function(req, res) {
       });
       db.collection('usercollection').update({_id: db.ObjectID.createFromHexString(req.session.user._id)}, {$set: {availableHours: req.session.user.availableHours - consumedHours}}, function(err) {
         if (err) {console.log(err)};
+        db.collection('usercollection').findOne({email: req.session.user.email}, function(err, result) {
+          req.session.user = result;
+          res.send(
+            (err === null) ? {msg: 'You have ' + result.availableHours + ' hour(s) to make reservations'} : {msg: err}
+          );
+        });
       });
-      res.send(
-        (err === null) ? {msg: ''} : {msg: err}
-      );
     });
   };
 });

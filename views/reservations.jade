@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1 Reserve an interpreter
-  h3 You have #{hours} hour(s) to make reservations
+  h3#availableHours You have #{hours} hour(s) to make reservations
   if hours > 0
     h3 Please select the date and time you want to reserve
     form#reservationForm
