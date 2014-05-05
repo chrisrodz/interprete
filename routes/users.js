@@ -9,10 +9,14 @@ var sendgrid  = require('sendgrid')('makobi', 'culo1124estupido');
 var pwd = require('pwd');
 
 router.get('/userlist', function(req, res) {
-    var db = req.db;
-    db.collection('usercollection').find().toArray(function (err, items) {
-        res.json(items);
-    });
+    if (req.session.user) {
+      res.json(req.session.user)
+    } else {
+      var db = req.db;
+      db.collection('usercollection').find().toArray(function (err, items) {
+          res.json({msg: "la lista"});
+      });
+    };
 });
 
 /* GET New User page. */
@@ -53,6 +57,37 @@ router.post('/adduser', function(req, res) {
       });
     });
 });
+
+/*
+* GET login page
+*/
+router.get('/login', function(req, res) {
+  res.render('login');
+});
+
+/*
+* POST login page
+*/
+router.post('/login', function(req, res) {
+  var db = req.db;
+  var userEmail = req.body.email;
+
+  db.collection('usercollection').find({"email": userEmail}).toArray(function(err, items) {
+    
+    var user = items[0];
+    pwd.hash(req.body.password, user.salt, function(pwderr, hash) {
+      if (hash == user.password) {
+        req.session.regenerate(function() {
+            req.session.user = user;
+            res.redirect('userList');
+        });
+      } else {
+        res.json({msg: "Invalid login"});
+      };
+    });
+  });
+});
+
 
 /*
  * DELETE to deleteuser.

@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 // Database connection info
 var mongo = require('mongoskin');
@@ -26,7 +27,8 @@ app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
+app.use(cookieParser('TuWaiEs7a6or8a'));
+app.use(session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
