@@ -11,7 +11,7 @@ function restrict (req, res, next) {
 
 /* GET users listing. */
 router.get('/', restrict, function(req, res) {
-  res.render('reservations');
+  res.render('reservations', {hours: req.session.user.availableHours});
 });
 
 router.post('/add', restrict, function(req, res) {

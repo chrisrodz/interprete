@@ -2,15 +2,19 @@ extends layout
 
 block content
   h1 Reserve an interpreter
-  h3 Please select the date and time you want to reserve
-  form#reservationForm
-    input#dateSelector(type='text', placeholder='Reservation Date')
-    br
-    input#beginTimeSelector(type='text', placeholder='From what time?')
-    br
-    input#endTimeSelector(type='text', placeholder='To what time?')
-    br
-    button(type='submit') Confirm
+  h3 You have #{hours} hour(s) to make reservations
+  if hours > 0
+    h3 Please select the date and time you want to reserve
+    form#reservationForm
+      input#dateSelector(type='text', placeholder='Reservation Date')
+      br
+      input#beginTimeSelector(type='text', placeholder='From what time?')
+      br
+      input#endTimeSelector(type='text', placeholder='To what time?')
+      br
+      button(type='submit') Confirm
+  else
+    h3 Sorry please buy more hours to make reservations
   h3 Your reservations
   #userReservations
     ul
