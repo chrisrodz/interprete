@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to our test
+
+    // Wrapper
+    #wrapper
+
+        
+
+        // ADD USER
+        h2 Add User
+        #addUser
+            fieldset
+                input#inputUserEmail(type='email', placeholder='Email', name='email')
+                input#inputUserPass(type='password', placeholder='Password', name='password')
+                button#btnAddUser Add User
+        // /ADD USER
+
+    // /WRAPPER

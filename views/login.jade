@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1 Login
+    p Welcome to our test
+
+    // Wrapper
+    #wrapper
+        // ADD USER
+        h2 Login
+        #addUser
+            form(action='', method='post')
+                input#inputUserEmail(type='email', placeholder='Email', name='email')
+                input#inputUserPass(type='password', placeholder='Password', name='password')
+                button#btnLogin Login
+        // /ADD USER
+
+    // /WRAPPER
