@@ -90,7 +90,7 @@ router.post('/login', function(req, res) {
         if (hash == user.password) {
           req.session.regenerate(function() {
               req.session.user = user;
-              res.redirect('/reservations');
+              res.redirect('/users/userinfo');
           });
         } else {
           res.render('login', {msg: "Invalid login. Please try again."});
@@ -123,6 +123,28 @@ router.get('/logout', function (req, res) {
     req.session.destroy(function () {
         res.redirect('login');
     });
+});
+
+/*
+* GET User confirmation page. He gets here through email.
+*/
+router.get('/userinfo', restrict, function(req, res) {
+  console.log(req.session.user.email);
+  res.render('userinfo', {user: req.session.user});
+});
+
+/*
+* POST User confirmation page. He gets here through email.
+*/
+router.post('/userinfo', restrict, function(req, res) {
+  var db = req.db;
+  db.collection('usercollection').update({_id: db.ObjectID.createFromHexString(req.session.user._id)}, {$set: {name: req.body.name, address: req.body.address, birth: req.body.birth, gender: req.body.gender, billing: req.body.billing} }, function(err) {
+    if (err) {console.log(err)};
+    db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.session.user._id)}, function(err, user) {
+      req.session.user = user;
+      res.render('userinfo', {user: req.session.user});
+    });
+  });
 });
 
 module.exports = router;

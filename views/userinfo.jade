@@ -1,0 +1,38 @@
+extends layout
+
+block content
+  h1 This is your profile
+  h3 #{user.name}
+  #profile
+      form(action='', method='post')
+          if !user.hasOwnProperty('name')
+            input#inputUserName(type='text', placeholder='Nombre', name='name', required='')
+          else
+            input#inputUserName(type='text', placeholder='Nombre', name='name', value='#{user.name}', required='')
+
+          if !user.hasOwnProperty('address')
+            input#inputUserAddress(type='text', placeholder='Direccion', name='address', required='')
+          else
+            input#inputUserAddress(type='text', placeholder='Direccion', name='address', value='#{user.address}', required='')
+          
+          if !user.hasOwnProperty('birth')
+            input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', required='')
+          else
+            input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', value='#{user.birth}', required='')
+          
+          if !user.hasOwnProperty('gender')
+            input#inputUserGender(type='text', placeholder='Genero', name='gender', required='')
+          else
+            input#inputUserGender(type='text', placeholder='Genero', name='gender', value='#{user.gender}', required='')
+          
+          if !user.hasOwnProperty('billing')
+            input#inputUserBilling(type='text', placeholder='Datos de Cobro', name='billing', required='')
+          else
+            input#inputUserBilling(type='text', placeholder='Datos de Cobro', name='billing', value='#{user.billing}', required='')
+          
+          button(type='submit') Save Profile
+          
+  
+
+block script
+  script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
