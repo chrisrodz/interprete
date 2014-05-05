@@ -16,9 +16,13 @@ router.get('/', restrict, function(req, res) {
 
 router.post('/add', restrict, function(req, res) {
   var db = req.db;
-  db.collection('reservations').insert(req.body, function(err, result) {
+
+  var reservationInfo = req.body;
+  reservationInfo.user_id = db.ObjectID.createFromHexString(req.session.user._id);
+
+  db.collection('reservations').insert(reservationInfo, function(err, result) {
     res.sendgrid.send({
-      to:       'christian.etpr10@gmail.com',
+      to:       req.session.user.email,
       from:     'christian.etpr10@gmail.com',
       subject:  'Interprete Reservation',
       text:     'You just made a reservation using interprete! Must be exciting! Here is the info. Date: '
@@ -31,6 +35,11 @@ router.post('/add', restrict, function(req, res) {
       (err === null) ? {msg: ''} : {msg: err}
     );
   });
+});
+
+router.get('/get', restrict, function(req, res) {
+  var db = req.db;
+  db.collection('reservations').find({})
 });
 
 router.get('/get/:id', restrict, function(req, res) {

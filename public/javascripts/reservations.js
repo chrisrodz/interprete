@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
 
   $('#reservationForm').on('submit', reserveDate);
 
-  getReservations(localStorage.userId);
+  getReservations();
 
 });
 
@@ -32,8 +32,7 @@ function reserveDate(event) {
     var reservationData = {
       'reservationDate': reservationDate,
       'beginTime': reservationBeginTime,
-      'endTime': reservationEndTime,
-      'userId': localStorage.userId
+      'endTime': reservationEndTime
     }
 
     if (reservationDate !== null) {
@@ -45,7 +44,7 @@ function reserveDate(event) {
       }).done(function(res) {
         if (res.msg === '') {
           console.log("Reservation success!");
-          getReservations(localStorage.userId);
+          getReservations();
         } else{
           console.log("Error: " + res.msg);
         };
@@ -54,11 +53,11 @@ function reserveDate(event) {
   };
 }
 
-function getReservations(id) {
+function getReservations() {
   $('#userReservations ul').empty();
   $.ajax({
     type: 'GET',
-    url: '/reservations/get/' + id,
+    url: '/reservations/get',
   }).done(function(res) {
     $.each(res, function() {
       $('#userReservations ul').append("<li>" + this.reservationDate 
