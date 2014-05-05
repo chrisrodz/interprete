@@ -28,14 +28,14 @@ router.get('/userlist', restrict, function(req, res) {
 });
 
 /* GET New User page. */
-router.get('/newuser', restrict, function(req, res, sendgrid) {
+router.get('/newuser', function(req, res, sendgrid) {
     res.render('newuser', { title: 'Add New User' });
 });
 
 /*
  * POST to adduser.
  */
-router.post('/adduser', restrict, function(req, res) {
+router.post('/adduser', function(req, res) {
     var db = req.db;
 
     var newUser = req.body;
@@ -54,7 +54,7 @@ router.post('/adduser', restrict, function(req, res) {
           to:       newUser.email,
           from:     'christian.etpr10@gmail.com',
           subject:  'interprete',
-          text:     'Created a user in interprete app. Confirm user at this link: http://localhost:3000/users/confirm' + result[0]._id
+          text:     'Created a user in interprete app. Confirm user at this link: http://localhost:3000/users/confirm/' + result[0]._id
         }, function(err, json) {
           if (err) { return console.error(err); }
           console.log(json);
