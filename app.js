@@ -21,6 +21,7 @@ var sendgrid = require('sendgrid')(process.env.SG_USER, process.env.SG_PASSWORD)
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var reservations = require('./routes/reservations');
+var instructions = require('./routes/instructions');
 
 var app = express();
 
@@ -51,6 +52,7 @@ app.use(function(req, res, next) {
 app.use('/', routes);
 app.use('/users', users);
 app.use('/reservations', reservations);
+app.use('/instructions', instructions);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

@@ -48,6 +48,8 @@ router.post('/adduser', function(req, res) {
       newUser.availableHours = 0;
       newUser.accountIsActive = false;
 
+      newUser.firstTime = true;
+
       // Insert user into db
       db.collection('usercollection').insert(newUser, function(err, result) {
         sendgrid.send({
@@ -142,9 +144,18 @@ router.post('/userinfo', restrict, function(req, res) {
     if (err) {console.log(err)};
     db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.session.user._id)}, function(err, user) {
       req.session.user = user;
-      res.render('userinfo', {user: req.session.user});
+      if (req.session.user.firstTime){
+        db.collection('usercollection').update({_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}, {$set: {firstTime: false} }, function(err) {
+          res.redirect('/instructions'); 
+        });
+      }
+      else{
+        res.render('userinfo', {user: req.session.user});
+      }
+      //res.render('userinfo', {user: req.session.user});
     });
   });
 });
+
 
 module.exports = router;
