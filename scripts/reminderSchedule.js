@@ -28,3 +28,5 @@ db.collection("reservations").find({reservationDate: tomorrow}).toArray(function
     }
   };
 });
+
+// TODO: Add setTimeout para marroniar el process exit.
