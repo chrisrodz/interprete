@@ -37,11 +37,18 @@ function restrict (req, res, next) {
     };
 }
 
-router.get('/', restrict, function(req, res) {
-  var vlineAuthToken = createToken(req.session.user._id);
+router.get('/:reservationid', restrict, function(req, res) {
   var db = req.db;
-  db.collection('usercollection').find().toArray(function(err, items) {
-    res.render('video', {session: req.session, jwt: vlineAuthToken, users: items, serviceId: serviceId})
+  db.collection('reservations').findOne({_id: db.ObjectID.createFromHexString(req.params.reservationid.toString()), user_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}, function(err, result) {
+    if (err) {console.log(err)};
+    if (result) {
+      var vlineAuthToken = createToken(req.session.user._id);
+      db.collection('usercollection').find().toArray(function(err, items) {
+        res.render('video', {session: req.session, jwt: vlineAuthToken, users: items, serviceId: serviceId})
+      });
+    } else{
+      res.redirect('/reservations');
+    };
   });
 });
 

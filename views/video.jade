@@ -2,15 +2,13 @@ extends layout
 
 block content
   h1 Video view!
-  p= session
-  p= jwt
-  p= users
-  p= serviceId
 
+  h3 List of available users(change to interpreters later)
   ul
     each val in users
       li(class="callbutton", data-userid="#{val._id}")
         a(href="#")= val.name
+      br
 
 block script
   script(src='https://static.vline.com/vline.js')
