@@ -59,4 +59,35 @@ router.get('/get', restrict, function(req, res) {
   });
 });
 
+router.get('/add-password', restrict, function(req, res) {
+  res.render('add_password', {user: req.session.user});
+});
+
+router.post('/add-password', restrict, function(req, res) {
+  var db = req.db;
+  var pass = req.body.password;
+  db.collection("passwords").findOne({password: pass}, function(err, result) {
+    if (err || result.used) {
+      res.render('add_password', {user: req.session.user, msg: err + ' Password used: ' + result.used});
+    } else{
+      db.collection("usercollection").update({_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}, {$inc: {availableHours: result.hours}}, function(err) {
+        if (err) {
+          res.render("add_password", {user: req.session.user, msg: err});
+        } else{
+          db.collection("passwords").update({_id: db.ObjectID.createFromHexString(result._id.toString())}, {$set: {used: true, user_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}}, function(err) {
+            if (err) {
+              res.render("add_password", {user: req.session.user, msg: err});
+            } else{
+              db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.session.user._id)}, function(err, user) {
+                req.session.user = user;
+                res.render("add_password", {user: req.session.user, msg: "Added hours!"});
+              });
+            };
+          });
+        };
+      });
+    };
+  });
+});
+
 module.exports = router;
