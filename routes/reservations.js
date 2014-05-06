@@ -74,7 +74,7 @@ router.post('/add-password', restrict, function(req, res) {
         if (err) {
           res.render("add_password", {user: req.session.user, msg: err});
         } else{
-          db.collection("passwords").update({_id: db.ObjectID.createFromHexString(result._id.toString())}, {$set: {used: true, user_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}}, function(err) {
+          db.collection("passwords").update({_id: db.ObjectID.createFromHexString(result._id.toString())}, {$set: {used_date: new Date(), used: true, user_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}}, function(err) {
             if (err) {
               res.render("add_password", {user: req.session.user, msg: err});
             } else{
