@@ -1,0 +1,75 @@
+extends layout
+
+block content
+  h1 Video view!
+  p= session
+  p= jwt
+  p= users
+  p= serviceId
+
+  ul
+    each val in users
+      li(class="callbutton", data-userid="#{val._id}")
+        a(href="#")= val.name
+
+block script
+  script(src='https://static.vline.com/vline.js')
+
+  script.
+    var vlineClient = (function() {
+      var client, vlinesession,
+        authToken = "#{jwt}",
+        serviceId = "#{serviceId}",
+        profile = {"displayName": "#{session.user.name}", "id": "#{session.user._id}"};
+
+      window.vlineClient = client = vline.Client.create({"serviceId": serviceId, "ui": true});
+
+      client.on('login', onLogin);
+
+      client.login(serviceId, profile, authToken);
+
+      function onLogin(event) {
+        vlinesession = event.target;
+
+        $('.callbutton').each(function (index, element) {
+            initCallButton($(this));
+          });
+      }
+
+      function initCallButton(button) {
+        var userId = button.attr("data-userid");
+
+        vlinesession.getPerson(userId).done(function (person) {
+
+          function onPresenceChange() {
+            if(person.getPresenceState() == 'online') {
+              button.removeClass().addClass('active');
+            } else {
+              button.removeClass();
+            }
+            button.attr('data-presence', person.getPresenceState());
+          }
+
+          onPresenceChange();
+
+          person.on('change', onPresenceChange);
+
+          button.click(function() {
+            if (person.getId() == vlinesession.getLocalPersonId()) {
+              alert('You cannot call yourself. Mojon.');
+              return;
+            }
+            if (button.hasClass('active')) {
+              person.startMedia();
+            }
+          });
+        });
+      }
+
+      return client;
+    })();
+
+    $(window).unload(function() {
+      vlineClient.logout();
+    })
+
