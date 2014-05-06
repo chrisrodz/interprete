@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	h1 Users:
+	each val in users
+		table
+			tr 
+				td Nombre: #{val.name} 
+
+				td email: 
+					a(href='/admin/userinfo/'+ val._id) #{val.email} 
+
+	a(href='/admin/addinterp/') Add interpreters

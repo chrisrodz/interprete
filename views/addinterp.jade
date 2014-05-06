@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    h1 Add Interpreter
+
+    // Wrapper
+    #wrapper
+        // LOGIN
+        h2 Give me his info!
+        #addUser
+            form(action='', method='post')
+                input#inputInterpEmail(type='email', placeholder='Email', name='email')
+                input#inputInterpName(type='text', placeholder='Nombre', name='name')
+                button(type='submit') Add Interpreter
+        // /LOGIN
+
+        each val in interps
+            table 
+                tr
+                    td #{val.email} 
+                    td #{val.name} 
+                    td  
+                        a(href='/admin/delete/' + val._id) delete
+
+        a(href='/admin/') View Users
+                        
+
+    // /WRAPPER
