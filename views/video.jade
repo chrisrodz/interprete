@@ -41,7 +41,7 @@ block script
 
           function onPresenceChange() {
             if(person.getPresenceState() == 'online') {
-              button.removeClass().addClass('active');
+              button.removeClass().addClass('btn-primary');
             } else {
               button.removeClass();
             }
@@ -57,7 +57,7 @@ block script
               alert('You cannot call yourself. Mojon.');
               return;
             }
-            if (button.hasClass('active')) {
+            if (button.hasClass('btn-primary')) {
               person.startMedia();
             }
           });
