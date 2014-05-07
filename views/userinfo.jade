@@ -32,6 +32,11 @@ block content
           
           button(type='submit') Save Profile
           
+  if !user.firstTime
+    a(href='/instructions') Instructions
+    br
+    a(href='/reservations') Reservations
+          
   
 
 block script
