@@ -56,7 +56,7 @@ router.post('/adduser', function(req, res) {
           to:       newUser.email,
           from:     'christian.etpr10@gmail.com',
           subject:  'interprete',
-          text:     'Created a user in interprete app. Confirm user at this link: http://localhost:3000/users/confirm/' + result[0]._id
+          text:     'Created a user in interprete app. Confirm user at this link: http://interprete.herokuapp.com/users/confirm/' + result[0]._id
         }, function(err, json) {
           if (err) { return console.error(err); }
           console.log(json);
