@@ -18,7 +18,7 @@ var amount = process.argv[2],
 for (var i = amount - 1; i >= 0; i--) {
   data.push({
     password: generator(15),
-    hours: hours,
+    hours: parseInt(hours),
     used: false,
     user_id: null,
     created_date: new Date()

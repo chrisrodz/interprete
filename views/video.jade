@@ -1,0 +1,174 @@
+extends layout
+
+block content
+  h1 Video view!
+
+  h3 List of available users(change to interpreters later)
+  ul
+    each val in users
+      li(class="callbutton", data-userid="#{val._id}")
+        a(href="#")= val.name
+      br
+
+block script
+  script(src='https://static.vline.com/vline.js')
+
+  script.
+    var vlineClient = (function() {
+      var client, vlinesession,
+        authToken = "#{jwt}",
+        serviceId = "#{serviceId}",
+        profile = {"displayName": "#{session.user.name}", "id": "#{session.user._id}"},
+        resId = "#{resId}";
+
+
+      window.vlineClient = client = vline.Client.create({"serviceId": serviceId, "ui": true});
+
+      client.on('login', onLogin);
+
+      client.login(serviceId, profile, authToken);
+
+      function onLogin(event) {
+        vlinesession = event.target;
+
+        $('.callbutton').each(function (index, element) {
+            initCallButton($(this));
+          });
+      }
+
+      function initCallButton(button) {
+        var userId = button.attr("data-userid");
+
+        vlinesession.getPerson(userId).done(function (person) {
+
+          function onPresenceChange() {
+            if(person.getPresenceState() == 'online') {
+              button.removeClass().addClass('btn-primary');
+            } else {
+              button.removeClass();
+            }
+            button.attr('data-presence', person.getPresenceState());
+          }
+
+          onPresenceChange();
+
+          person.on('change', onPresenceChange);
+
+          button.click(function() {
+            if (person.getId() == vlinesession.getLocalPersonId()) {
+              alert('You cannot call yourself. Mojon.');
+              return;
+            }
+            if (button.hasClass('btn-primary')) {
+              var med = person.startMedia();
+              med.on('enterState:connecting', function() {
+                console.log('Time is running!');
+                sw_start();
+                console.log(videoChatTime);
+              });
+              med.on('exitState:connecting', function() {
+                console.log("Time stopped! Save to db!");
+                Stop();
+                console.log(videoChatTime);
+                $.ajax({
+                  type: 'POST',
+                  url: '/video/add-time',
+                  data: {time: videoChatTime, id: resId },
+                  dataType: 'JSON'
+                }).done(function(res) {
+                    console.log("Time saved to db!");
+                });
+              });
+            }
+          });
+        });
+      }
+
+      return client;
+    })();
+
+    $(window).unload(function() {
+      vlineClient.logout();
+    })
+    var timercount = 0;
+    var timestart  = null;
+    var videoChatTime;
+
+    function showtimer() {
+      if(timercount) {
+        clearTimeout(timercount);
+        clockID = 0;
+      }
+      if(!timestart){
+        timestart = new Date();
+      }
+      var timeend = new Date();
+      var timedifference = timeend.getTime() - timestart.getTime();
+      timeend.setTime(timedifference);
+      var minutes_passed = timeend.getMinutes();
+      if(minutes_passed < 10){
+        minutes_passed = "0" + minutes_passed;
+      }
+      var seconds_passed = timeend.getSeconds();
+      if(seconds_passed < 10){
+        seconds_passed = "0" + seconds_passed;
+      }
+      videoChatTime = minutes_passed + ":" + seconds_passed;
+      timercount = setTimeout("showtimer()", 1000);
+    }
+
+    function sw_start(){
+      if(!timercount){
+      timestart   = new Date();
+      videoChatTime = "00:00";
+      timercount  = setTimeout("showtimer()", 1000);
+      }
+      else{
+      var timeend = new Date();
+        var timedifference = timeend.getTime() - timestart.getTime();
+        timeend.setTime(timedifference);
+        var minutes_passed = timeend.getMinutes();
+        if(minutes_passed < 10){
+          minutes_passed = "0" + minutes_passed;
+        }
+        var seconds_passed = timeend.getSeconds();
+        if(seconds_passed < 10){
+          seconds_passed = "0" + seconds_passed;
+        }
+        var milliseconds_passed = timeend.getMilliseconds();
+        if(milliseconds_passed < 10){
+          milliseconds_passed = "00" + milliseconds_passed;
+        }
+        else if(milliseconds_passed < 100){
+          milliseconds_passed = "0" + milliseconds_passed;
+        }
+      }
+    }
+
+    function Stop() {
+      if(timercount) {
+        clearTimeout(timercount);
+        timercount  = 0;
+        var timeend = new Date();
+        var timedifference = timeend.getTime() - timestart.getTime();
+        timeend.setTime(timedifference);
+        var minutes_passed = timeend.getMinutes();
+        if(minutes_passed < 10){
+          minutes_passed = "0" + minutes_passed;
+        }
+        var seconds_passed = timeend.getSeconds();
+        if(seconds_passed < 10){
+          seconds_passed = "0" + seconds_passed;
+        }
+        var milliseconds_passed = timeend.getMilliseconds();
+        if(milliseconds_passed < 10){
+          milliseconds_passed = "00" + milliseconds_passed;
+        }
+        else if(milliseconds_passed < 100){
+          milliseconds_passed = "0" + milliseconds_passed;
+        }
+        videoChatTime = minutes_passed + ":" + seconds_passed + "." + milliseconds_passed;
+      }
+      timestart = null;
+    }
+

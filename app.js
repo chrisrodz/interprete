@@ -22,6 +22,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var reservations = require('./routes/reservations');
 var instructions = require('./routes/instructions');
+var video = require('./routes/video');
 var admin = require('./routes/admin');
 
 var app = express();
@@ -54,6 +55,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/reservations', reservations);
 app.use('/instructions', instructions);
+app.use('/video', video);
 app.use('/admin', admin);
 
 /// catch 404 and forwarding to error handler

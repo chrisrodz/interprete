@@ -1,15 +1,30 @@
 extends layout
 
 block content
-	h1 Users:
-	each val in users
-		table
-			tr 
-				td Nombre: #{val.name} 
+  h1 Users:
+  each val in users
+    table
+      tr 
+      td Nombre: #{val.name} 
 
-				td email: 
-					a(href='/admin/userinfo/'+ val._id) #{val.email}  
-					span | 
-					a(href='/admin/delete_user/' + val._id) delete
+        td email: 
+          a(href='/admin/userinfo/'+ val._id) #{val.email}  
+          span | 
+          a(href='/admin/delete_user/' + val._id) delete
 
-	a(href='/admin/addinterp/') Add interpreters
+  h1 Passwords:
+  each val in passwords
+    table
+      tr
+        td Password: <strong>#{val.password}</strong>
+
+        td Hours: <strong>#{val.hours}</strong>
+
+        td Used: <strong>#{val.used}</strong>
+
+        td Created Date: #{val.created_date}
+
+  a(href='/admin/addinterp/') Add interpreters
+  br
+  a(href='/admin/generate-passwords') Add new passwords
+
