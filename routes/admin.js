@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var childProcess = require('child_process');
+
 function restrict (req, res, next) {
     if (req.session.user) {
         next();
@@ -15,7 +17,9 @@ function restrict (req, res, next) {
 router.get('/', function(req, res) {
 	var db = req.db;
 	db.collection('usercollection').find().toArray(function (err, items) {
-		res.render('admin', {users: items});
+    db.collection('passwords').find().toArray(function (err2, passes) {
+      res.render('admin', {users: items, passwords: passes});
+    });
 	});
 });
 
@@ -66,6 +70,21 @@ router.get('/delete/:interpid', function(req, res) {
     db.collection('interpcollection').find().toArray(function (err, items){
 		res.redirect('/admin/addinterp/');
 	});
+  });
+});
+
+router.get('/generate-passwords', function(req, res) {
+  res.render('generate_passwords')
+});
+
+router.post('/generate-passwords', function(req, res) {
+  var hours = req.body.hours;
+  var amount = req.body.amount;
+  childProcess.exec('node ./scripts/pwdGenerator.js ' + amount + ' ' + hours, function(error, stdout, stderr) {
+    console.log(error);
+    console.log(stdout);
+    console.log(stderr);
+    res.render('generate_passwords', {addedPasswords: true});
   });
 });
 
