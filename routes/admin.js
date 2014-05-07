@@ -32,6 +32,16 @@ router.get('/userinfo/:userid', function(req, res) {
 });
 
 /*
+* GET user delete
+*/
+router.get('/delete_user/:userid', function(req, res) {
+  var db = req.db;
+  db.collection('usercollection').remove({_id: db.ObjectID.createFromHexString(req.params.userid.toString())}, function(err) {
+		res.redirect('/admin/');
+  });
+});
+
+/*
 * GET User confirmation page. He gets here through email.
 */
 router.get('/addinterp', function(req, res) {

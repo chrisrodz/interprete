@@ -8,6 +8,8 @@ block content
 				td Nombre: #{val.name} 
 
 				td email: 
-					a(href='/admin/userinfo/'+ val._id) #{val.email} 
+					a(href='/admin/userinfo/'+ val._id) #{val.email}  
+					span | 
+					a(href='/admin/delete_user/' + val._id) delete
 
 	a(href='/admin/addinterp/') Add interpreters

@@ -12,10 +12,11 @@ block content
         // ADD USER
         h2 Add User
         #addUser
-            fieldset
+            form(action='', method='post')
+                input#inputUserName(type='text', placeholder='Nombre', name='name')
                 input#inputUserEmail(type='email', placeholder='Email', name='email')
                 input#inputUserPass(type='password', placeholder='Password', name='password')
-                button#btnAddUser Add User
+                button#btnLogin Login
         // /ADD USER
 
     // /WRAPPER

@@ -35,7 +35,7 @@ router.get('/newuser', function(req, res, sendgrid) {
 /*
  * POST to adduser.
  */
-router.post('/adduser', function(req, res) {
+router.post('/newuser', function(req, res) {
     var db = req.db;
 
     var newUser = req.body;
@@ -61,9 +61,7 @@ router.post('/adduser', function(req, res) {
           if (err) { return console.error(err); }
           console.log(json);
         });
-        res.send(
-            (err === null) ? { msg: '' } : { msg: err }
-        );
+        res.render('confirm', {msg: 'email has been sent to ' + newUser.email})
       });
     });
 });
