@@ -59,7 +59,14 @@ function getReservations() {
   }).done(function(res) {
     $.each(res, function() {
       $('#userReservations ul').append("<li>" + this.reservationDate 
-        + ". From: " + this.beginTime + " To: " + this.endTime + "</li>");
+        + ". From: " + this.beginTime + " To: " + this.endTime);
+      if (this.celebrated) {
+        $('#userReservations ul').append("Chat Duration (in minutes): " + this.chatDuration);
+      } else{
+        $('#userReservations ul').append("<a href='/video/" + this._id +"'>link to video (test!)</a>");
+      };
+      $('#userReservations ul').append("</li>");
+
     });
   });
 }

@@ -44,11 +44,24 @@ router.get('/:reservationid', restrict, function(req, res) {
     if (result) {
       var vlineAuthToken = createToken(req.session.user._id);
       db.collection('usercollection').find().toArray(function(err, items) {
-        res.render('video', {session: req.session, jwt: vlineAuthToken, users: items, serviceId: serviceId})
+        res.render('video', {session: req.session, jwt: vlineAuthToken, users: items, serviceId: serviceId, resId: req.params.reservationid})
       });
     } else{
       res.redirect('/reservations');
     };
+  });
+});
+
+router.post('/add-time', restrict, function(req, res) {
+  var db = req.db,
+      time = req.body.time,
+      resId = req.body.id;
+  db.collection('reservations').update({_id: db.ObjectID.createFromHexString(resId.toString())}, {$set: {chatDuration: time, celebrated: true}}, function(err) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send("Succes! Time saved to db!");
+    }
   });
 });
 
