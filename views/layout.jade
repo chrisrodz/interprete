@@ -1,13 +1,19 @@
 doctype html
 html
-  head
-    title Interpretes
-    link(rel='stylesheet', href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
-        
-    script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
-    script(src='/javascripts/global.js')
+	head
+		title Interpretes
+		link(rel='stylesheet', href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body
+		if !user
+			a(href='/users/newuser') Register
+			br
+			a(href='/users/login') Login
+			br
+		else
+			a(href='/users/logout') Logout
+			br
+		block content
 
-    block script
+	script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+	script(src='/javascripts/global.js')
