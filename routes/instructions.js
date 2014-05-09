@@ -13,7 +13,7 @@ function restrict (req, res, next) {
 * GET instructions view
 */
 router.get('/', restrict, function(req, res) {
-  res.render('instructions');
+  res.render('instructions', {user: req.session.user});
 });
 
 module.exports = router;
