@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h3 Admin login
+  if msg
+    h3= msg
+  form(action='', method='post')
+    input(name='email', type='email', placeholder='Admin Email')
+    input(name='password', type='password', placeholder='Admin Password')
+    input(type='submit', value='Login')

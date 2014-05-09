@@ -4,17 +4,17 @@ var router = express.Router();
 var childProcess = require('child_process');
 
 function restrict (req, res, next) {
-    if (req.session.user) {
+    if (req.session.admin) {
         next();
     } else {
-        res.redirect('/users/login');
+        res.redirect('/admin/login');
     };
 }
 
 /*
 * GET admin view
 */
-router.get('/', function(req, res) {
+router.get('/', restrict, function(req, res) {
 	var db = req.db;
 	db.collection('usercollection').find().toArray(function (err, items) {
     db.collection('passwords').find().toArray(function (err2, passes) {
@@ -23,10 +23,23 @@ router.get('/', function(req, res) {
 	});
 });
 
+router.get('/login', function(req, res) {
+  res.render('admin_login');
+});
+
+router.post('/login', function(req, res) {
+  if (req.body.email == 'christian.etpr10@gmail.com' && req.body.password == 'teamo') {
+    req.session.admin = true;
+    res.redirect('/admin');
+  } else {
+    res.render('admin_login', {msg: 'Wrong credentials. Sorry.'});
+  };
+});
+
 /*
 * GET admin userinfo view
 */
-router.get('/userinfo/:userid', function(req, res) {
+router.get('/userinfo/:userid', restrict, function(req, res) {
 	var db = req.db;
 	db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.params.userid)}, function(err, user) {
 		db.collection('reservations').find({user_id: db.ObjectID.createFromHexString(user._id.toString())}).toArray(function (err, reserv) {
@@ -38,7 +51,7 @@ router.get('/userinfo/:userid', function(req, res) {
 /*
 * GET user delete
 */
-router.get('/delete_user/:userid', function(req, res) {
+router.get('/delete_user/:userid', restrict, function(req, res) {
   var db = req.db;
   db.collection('usercollection').remove({_id: db.ObjectID.createFromHexString(req.params.userid.toString())}, function(err) {
 		res.redirect('/admin/');
@@ -48,7 +61,7 @@ router.get('/delete_user/:userid', function(req, res) {
 /*
 * GET User confirmation page. He gets here through email.
 */
-router.get('/addinterp', function(req, res) {
+router.get('/addinterp', restrict, function(req, res) {
 	var db = req.db;
 	db.collection('interpcollection').find().toArray(function (err, items){
   		res.render('addinterp', {interps: items});
@@ -58,7 +71,7 @@ router.get('/addinterp', function(req, res) {
 /*
  * POST to addinterp.
  */
-router.post('/addinterp', function(req, res) {
+router.post('/addinterp', restrict, function(req, res) {
 	var db = req.db;
 
 	var newInterp = req.body;
@@ -74,7 +87,7 @@ router.post('/addinterp', function(req, res) {
 /*
 * GET interp delete
 */
-router.get('/delete/:interpid', function(req, res) {
+router.get('/delete/:interpid', restrict, function(req, res) {
   var db = req.db;
   db.collection('interpcollection').remove({_id: db.ObjectID.createFromHexString(req.params.interpid.toString())}, function(err) {
     db.collection('interpcollection').find().toArray(function (err, items){
@@ -85,11 +98,11 @@ router.get('/delete/:interpid', function(req, res) {
 
 
 // Routes to generate hours passwords
-router.get('/generate-passwords', function(req, res) {
+router.get('/generate-passwords', restrict, function(req, res) {
   res.render('generate_passwords')
 });
 
-router.post('/generate-passwords', function(req, res) {
+router.post('/generate-passwords', restrict, function(req, res) {
   var hours = req.body.hours;
   var amount = req.body.amount;
   childProcess.exec('node ./scripts/pwdGenerator.js ' + amount + ' ' + hours, function(error, stdout, stderr) {
@@ -101,7 +114,7 @@ router.post('/generate-passwords', function(req, res) {
 });
 
 // Route to approve reservations
-router.get('/approve-reservation/:reservid', function(req, res) {
+router.get('/approve-reservation/:reservid', restrict, function(req, res) {
   var reserve_id = req.params.reservid;
   var db = req.db;
   db.collection('reservations').update({_id: db.ObjectID.createFromHexString(reserve_id.toString())}, {$set: {approved_by_admin: true}}, function(err) {
