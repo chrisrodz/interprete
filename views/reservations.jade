@@ -3,14 +3,16 @@ extends layout
 block content
   h1 Reserve an interpreter
   h3#availableHours You have #{hours} hour(s) to make reservations
+  if msg
+    h3= msg
   if hours > 0
     h3 Please select the date and time you want to reserve
-    form#reservationForm
-      input#dateSelector(type='text', placeholder='Reservation Date')
+    form#reservationForm(action='/reservations/add', method='post')
+      input#dateSelector(type='text', placeholder='Reservation Date', name='reservationDate')
       br
-      input#beginTimeSelector(type='text', placeholder='From what time?')
+      input#beginTimeSelector(type='text', placeholder='From what time?', name='beginTime')
       br
-      input#endTimeSelector(type='text', placeholder='To what time?')
+      input#endTimeSelector(type='text', placeholder='To what time?', name='endTime')
       br
       button(type='submit') Confirm
   else
@@ -18,7 +20,10 @@ block content
   h3 Your reservations
   #userReservations
     ul
-
+    each reserv in userReservations
+      li Reservation date: #{reserv.reservationDate}. From: #{reserv.beginTime} To #{reserv.endTime}
+        br
+        | Approved: #{reserv.approved_by_admin}
   a(href='/reservations/add-password') Get more hours
   br
   a(href='/users/userinfo') Profile

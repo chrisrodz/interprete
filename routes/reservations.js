@@ -12,7 +12,15 @@ function restrict (req, res, next) {
 
 /* GET users listing. */
 router.get('/', restrict, function(req, res) {
-  res.render('reservations', {hours: req.session.user.availableHours});
+  var db = req.db;
+  db.collection('reservations').find().toArray(function(err, items) {
+    if (err) {console.log(err);};
+    if (req.session.err) {
+      var msg = req.session.err;
+      req.session.err = null;
+    };
+    res.render('reservations', {hours: req.session.user.availableHours, userReservations: items, msg: msg});
+  });
 });
 
 router.post('/add', restrict, function(req, res) {
@@ -21,12 +29,11 @@ router.post('/add', restrict, function(req, res) {
   var reservationInfo = req.body;
   reservationInfo.user_id = db.ObjectID.createFromHexString(req.session.user._id);
 
-  console.log(req.body);
-
   var consumedHours = (Math.abs(moment(req.body.beginTime, "HH:mm a").diff(moment(req.body.endTime, "HH:mm a"))))/3600000;
 
   if (consumedHours > req.session.user.availableHours) {
-    res.render('/', {msg: 'Not enough hours'});
+    req.session.err = "Not enough hours";
+    res.redirect("/reservations");
   } else{
     db.collection('reservations').insert(reservationInfo, function(err, result) {
       res.sendgrid.send({
@@ -36,16 +43,14 @@ router.post('/add', restrict, function(req, res) {
         text:     'You just made a reservation using interprete! Must be exciting! Here is the info. Date: '
                   + req.body.reservationDate + ". From: " + req.body.beginTime + " To: " + req.body.endTime
       }, function(err, json) {
-        if (err) { return console.error(err); }
+        if (err) { req.session.err = err; }
         console.log(json);
       });
       db.collection('usercollection').update({_id: db.ObjectID.createFromHexString(req.session.user._id)}, {$set: {availableHours: req.session.user.availableHours - consumedHours}}, function(err) {
-        if (err) {console.log(err)};
+        if (err) {req.session.err = err};
         db.collection('usercollection').findOne({email: req.session.user.email}, function(err, result) {
           req.session.user = result;
-          res.send(
-            (err === null) ? {msg: 'You have ' + result.availableHours + ' hour(s) to make reservations'} : {msg: err}
-          );
+          res.redirect('/reservations');
         });
       });
     });
