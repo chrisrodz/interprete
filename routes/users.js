@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Sendgrid for sending emails.
 // Alex: No pongas tus credentials directo BAD! >:(
-var sendgrid  = require('sendgrid')('makobi', 'culo1124estupido');
+// var sendgrid  = require('sendgrid')('makobi', 'culo1124estupido');
 
 // Password hashing
 var pwd = require('pwd');
@@ -28,7 +28,7 @@ router.get('/userlist', restrict, function(req, res) {
 });
 
 /* GET New User page. */
-router.get('/newuser', function(req, res, sendgrid) {
+router.get('/newuser', function(req, res) {
     res.render('newuser', { title: 'Add New User' });
 });
 
@@ -52,7 +52,7 @@ router.post('/newuser', function(req, res) {
 
       // Insert user into db
       db.collection('usercollection').insert(newUser, function(err, result) {
-        sendgrid.send({
+        res.sendgrid.send({
           to:       newUser.email,
           from:     'christian.etpr10@gmail.com',
           subject:  'interprete',
