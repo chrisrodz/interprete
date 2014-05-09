@@ -1,12 +1,15 @@
 extends layout
 
 block content
-	h1 #{one.name} #{one.email}:
-	ol 
-		h1 Reservations:
-		each val in reservations
-			li Date: #{val.reservationDate} from #{val.beginTime} to #{val.endTime}
+  h1 #{one.name} #{one.email}:
+  ol 
+    h1 Reservations:
+    each val in reservations
+      li Date: #{val.reservationDate} from #{val.beginTime} to #{val.endTime}
+        |  Approved: #{val.approved_by_admin} 
+        if !val.approved_by_admin
+          a(href='/admin/approve-reservation/#{val._id}') Click here to approve reservation
 
-	a(href='/admin/') View Users
-	br
-	a(href='/admin/addinterp/') Add interpreters
+  a(href='/admin/') View Users
+  br
+  a(href='/admin/addinterp/') Add interpreters

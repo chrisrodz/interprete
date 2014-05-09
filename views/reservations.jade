@@ -21,9 +21,12 @@ block content
   #userReservations
     ul
     each reserv in userReservations
-      li Reservation date: #{reserv.reservationDate}. From: #{reserv.beginTime} To #{reserv.endTime}
+      li Reservation date: <strong>#{reserv.reservationDate}</strong>. From: <strong>#{reserv.beginTime}</strong> To <strong>#{reserv.endTime}</strong>
         br
-        | Approved: #{reserv.approved_by_admin}
+        | Approved: <strong>#{reserv.approved_by_admin}</strong> 
+        if reserv.approved_by_admin
+          | Link to video: 
+          a(href='/video/#{reserv._id}') Test link.
   a(href='/reservations/add-password') Get more hours
   br
   a(href='/users/userinfo') Profile

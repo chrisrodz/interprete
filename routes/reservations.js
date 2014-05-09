@@ -28,6 +28,7 @@ router.post('/add', restrict, function(req, res) {
 
   var reservationInfo = req.body;
   reservationInfo.user_id = db.ObjectID.createFromHexString(req.session.user._id);
+  reservationInfo.approved_by_admin = false;
 
   var consumedHours = (Math.abs(moment(req.body.beginTime, "HH:mm a").diff(moment(req.body.endTime, "HH:mm a"))))/3600000;
 

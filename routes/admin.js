@@ -83,6 +83,8 @@ router.get('/delete/:interpid', function(req, res) {
   });
 });
 
+
+// Routes to generate hours passwords
 router.get('/generate-passwords', function(req, res) {
   res.render('generate_passwords')
 });
@@ -95,6 +97,15 @@ router.post('/generate-passwords', function(req, res) {
     console.log(stdout);
     console.log(stderr);
     res.render('generate_passwords', {addedPasswords: true});
+  });
+});
+
+// Route to approve reservations
+router.get('/approve-reservation/:reservid', function(req, res) {
+  var reserve_id = req.params.reservid;
+  var db = req.db;
+  db.collection('reservations').update({_id: db.ObjectID.createFromHexString(reserve_id.toString())}, {$set: {approved_by_admin: true}}, function(err) {
+    res.redirect('back');
   });
 });
 
