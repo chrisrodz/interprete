@@ -46,7 +46,7 @@ router.get('/delete_user/:userid', function(req, res) {
 });
 
 /*
-* GET User confirmation page. He gets here through email.
+* GET view to add interpreters
 */
 router.get('/addinterp', function(req, res) {
 	var db = req.db;
@@ -56,7 +56,7 @@ router.get('/addinterp', function(req, res) {
 });
 
 /*
- * POST to addinterp.
+ * POST view to add interpreters
  */
 router.post('/addinterp', function(req, res) {
 	var db = req.db;
@@ -84,11 +84,12 @@ router.get('/delete/:interpid', function(req, res) {
 });
 
 
-// Routes to generate hours passwords
+// GET view to generate hours passwords
 router.get('/generate-passwords', function(req, res) {
   res.render('generate_passwords')
 });
 
+// POST view to add hours passwords
 router.post('/generate-passwords', function(req, res) {
   var hours = req.body.hours;
   var amount = req.body.amount;
@@ -104,8 +105,23 @@ router.post('/generate-passwords', function(req, res) {
 router.get('/approve-reservation/:reservid', function(req, res) {
   var reserve_id = req.params.reservid;
   var db = req.db;
-  db.collection('reservations').update({_id: db.ObjectID.createFromHexString(reserve_id.toString())}, {$set: {approved_by_admin: true}}, function(err) {
-    res.redirect('back');
+  var sendgrid = res.sendgrid;
+  db.collection('reservations').update({_id: db.ObjectID.createFromHexString(reserve_id.toString())}, {$set: {approved_by_admin: true, confirmed_by_user: false}}, function(err) {
+    db.collection('reservations').findOne({_id: db.ObjectID.createFromHexString(reserve_id.toString())}, function(err2, item) {
+      db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(item.user_id.toString())}, function(err2, user) {
+        res.sendgrid.send({
+          to:       user.email,
+          from:     'christian.etpr10@gmail.com',
+          subject:  'Interprete Reservation: Admin confirmed [ACTION REQUIRED]',
+          text:     'An admin has just approved your reservation for: '
+                    + item.reservationDate + ". From: " + item.beginTime + " To: " + item.endTime
+                    + ". To confirm the reservation click this link: http://localhost:3000/reservations/confirm-reservation/" + item._id
+        }, function(err, json) {
+          if (err) { req.session.err = err; }
+          res.redirect('back');
+        });
+      });
+    });
   });
 });
 
