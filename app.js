@@ -14,7 +14,7 @@ db.ObjectID = mongo.ObjectID;
 
 
 // Sendgrid for emails
-var sendgrid = require('sendgrid')(process.env.SG_USER, process.env.SG_PASSWORD);
+ var sendgrid = require('sendgrid')(process.env.SG_USER, process.env.SG_KEY);
 
 
 // Routes

@@ -40,29 +40,23 @@ router.post('/newuser', function(req, res) {
 
     var newUser = req.body;
 
-    pwd.hash(newUser.password, function(err, salt, hash) {
-      if (err) throw err;
-      // Save salt and hash to user object
-      newUser.password = hash;
-      newUser.salt = salt;
-      newUser.availableHours = 0;
-      newUser.accountIsActive = false;
+    newUser.availableHours = 0;
+    newUser.accountIsActive = false;
 
-      newUser.firstTime = true;
+    newUser.firstTime = true;
 
-      // Insert user into db
-      db.collection('usercollection').insert(newUser, function(err, result) {
-        res.sendgrid.send({
-          to:       newUser.email,
-          from:     'christian.etpr10@gmail.com',
-          subject:  'interprete',
-          text:     'Created a user in interprete app. Confirm user at this link: http://interprete.herokuapp.com/users/confirm/' + result[0]._id
-        }, function(err, json) {
-          if (err) { return console.error(err); }
-          console.log(json);
-        });
-        res.render('confirm', {msg: 'email has been sent to ' + newUser.email})
+    // Insert user into db
+    db.collection('usercollection').insert(newUser, function(err, result) {
+      res.sendgrid.send({
+        to:       newUser.email,
+        from:     'christian.etpr10@gmail.com',
+        subject:  'interprete',
+        text:     'Created a user in interprete app. Confirm user at this link: http://localhost:3000/users/confirm/' + result[0]._id
+      }, function(err, json) {
+        if (err) { return console.error(err); }
+        console.log(json);
       });
+      res.render('confirm', {msg: 'email has been sent to ' + newUser.email})
     });
 });
 
@@ -111,7 +105,7 @@ router.get('/confirm/:userid', function(req, res) {
       res.redirect('/users/newuser');
     } else{
       db.collection('usercollection').update({_id: user._id}, {$set: {accountIsActive: true}}, function(err) {
-        res.redirect('/users/login');
+        res.redirect('/users/setpass/'+user._id);
       });
     };
   });
@@ -152,6 +146,31 @@ router.post('/userinfo', restrict, function(req, res) {
       }
       //res.render('userinfo', {user: req.session.user});
     });
+  });
+});
+
+/*
+* GET User confirmation page. He gets here through email.
+*/
+router.get('/setpass/:userid', function(req, res) {
+  res.render('setpass');
+});
+
+/*
+* GET User confirmation page. He gets here through email.
+*/
+router.post('/setpass/:userid', function(req, res) {
+  var db = req.db;
+  pwd.hash(req.body.password, function(err, salt, hash) {
+      if (err) throw err;
+      // Save salt and hash to user object
+      var pass = hash;
+      var sal = salt;
+      db.collection('usercollection').update({_id: db.ObjectID.createFromHexString(req.params.userid.toString())}, {$set: {password: pass, salt: sal} }, function(err) {
+        if (err) {console.log(err)};
+        res.redirect('/users/login');
+      });
+
   });
 });
 
