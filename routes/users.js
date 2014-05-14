@@ -84,7 +84,11 @@ router.post('/login', function(req, res) {
         if (hash == user.password) {
           req.session.regenerate(function() {
               req.session.user = user;
-              res.redirect('/users/userinfo');
+              if (user.firstTime) {
+                res.redirect('/users/userinfo');
+              } else {
+                res.redirect('/instructions');
+              };
           });
         } else {
           res.render('login', {msg: "Invalid login. Please try again."});
