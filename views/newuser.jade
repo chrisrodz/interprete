@@ -9,8 +9,12 @@ block content
         #addUser
             form(action='', method='post')
                 input#inputUserName(type='text', placeholder='Nombre', name='name', , required='')
-                input#inputUserEmail(type='email', placeholder='Email', name='email', , required='')
-                input#inputUserPass(type='password', placeholder='Password', name='password', , required='')
+                input#inputUserEmail(type='email', placeholder='Email', name='email', required='')
+                h3 Escoja su lenguaje principal
+                label Español 
+                    input#inputUserLanguage(type="radio", name="language", value="spanish")
+                label Ingles 
+                    input#inputUserLanguage(type="radio", name="language", value="english")
                 button#btnLogin Login
         // /ADD USER
 

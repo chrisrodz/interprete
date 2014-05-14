@@ -19,7 +19,7 @@ router.get('/', restrict, function(req, res) {
       var msg = req.session.err;
       req.session.err = null;
     };
-    res.render('reservations', {hours: req.session.user.availableHours, userReservations: items, msg: msg});
+    res.render('reservations', {hours: req.session.user.availableHours, userReservations: items, msg: msg, user: req.session.user});
   });
 });
 

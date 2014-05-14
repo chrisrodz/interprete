@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1 This is your profile
+  h1 This is your supplier
   h3 #{user.firstTime}
   #profile
       form(action='', method='post')
@@ -24,7 +24,47 @@ block content
           if !user.hasOwnProperty('birth')
             input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', value='#{user.birth}', required='')
+            input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', value='#{user.birth}', required='') 
+          
+          input#inputUserEmail(type='email', placeholder='Email', name='email', value='#{user.email}', required='')
+          
+          if !user.hasOwnProperty('profession')
+            label Profesion 
+            select
+              option(value="doctor") Medico
+              option(value="acountant") Contable
+              option(value="lawyer") Abogado
+              option(value="professor") Profesor
+              option(value="other") Otro
+          else
+            label Profesion 
+            select
+              if user.phoneProvider === 'doctor'
+                option(value="doctor" selected) Medico
+              else
+                option(value="doctor") Medico
+              if user.phoneProvider === 'acountant'
+                option(value="acountant" selected) Contable
+              else
+                option(value="acountant") Contable
+              if user.phoneProvider === 'lawyer'
+                option(value="lawyer" selected) Abogado
+              else
+                option(value="lawyer") Abogado
+              if user.phoneProvider === 'professor'
+                option(value="professor" selected) Profesor
+              else
+                option(value="professor") Profesor
+              if user.phoneProvider === 'other'
+                option(value="other" selected) Otro
+              else
+                option(value="other") Otro
+
+          if !user.hasOwnProperty('other')
+            input#inputUserName(type='text', placeholder='Si otro, especifica', name='other')
+          else
+            input#inputUserName(type='text', placeholder='Si otro, especifica', name='other', value='#{user.other}')
+
           if !user.hasOwnProperty('gender')
             label Hombre 
               input#inputUserLanguage(type="radio", name="gender", value="male", required="")
@@ -101,33 +141,6 @@ block content
             input#inputUserBirth(type='text', placeholder='Numero de Telefono', name='phoneNumber', required='')
           else
             input#inputUserBirth(type='text', placeholder='Numero de Telefono', name='phoneNumber', value='#{user.phoneNumber}', required='')
-
-          if !user.hasOwnProperty('phoneProvider')
-            label Proveedor de Telefono 
-            select
-              option(value="tmobile") Tmobile
-              option(value="att") AT&T
-              option(value="claro") Claro
-              option(value="open") Open Mobile
-          else
-            label Proveedor de Telefono 
-            select
-              if user.phoneProvider === 'tmobile'
-                option(value="tmobile" selected) Tmobile
-              else
-                option(value="tmobile") Tmobile
-              if user.phoneProvider === 'att'
-                option(value="att" selected) AT&T
-              else
-                option(value="att") AT&T
-              if user.phoneProvider === 'claro'
-                option(value="claro" selected) Claro
-              else
-                option(value="claro") Claro
-              if user.phoneProvider === 'open' 
-                option(value="open" selected) Open Mobile
-              else
-                option(value="open") Open Mobile
           br
 
           label Informacion de Trabajo
@@ -141,37 +154,41 @@ block content
           else
             input#inputUserBirth(type='text', placeholder='Lugar de Telefono', name='workPlace', value='#{user.workPlace}', required='')
           br
-          label Contacto de Emergencia
-          if !user.hasOwnProperty('emergency_name')
-            input#inputUserBirth(type='text', placeholder='Nombre', name='emergency_name', required='')
+          label Direccion de Trabajo
+
+          if !user.hasOwnProperty('wstreet1')
+            input#inputUserAddress(type='text', placeholder='Calle 1', name='wstreet1', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Nombre', name='emergency_name', value='#{user.emergency_name}', required='')
-          if !user.hasOwnProperty('emergency_relation')
-            input#inputUserBirth(type='text', placeholder='Parentesco', name='emergency_relation', required='')
+            input#inputUserAddress(type='text', placeholder='Calle 1', name='wstreet1', value='#{user.wstreet1}', required='')
+
+          if !user.hasOwnProperty('wstreet2')
+            input#inputUserAddress(type='text', placeholder='Calle 2', name='wstreet2', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Parentesco', name='emergency_relation', value='#{user.emergency_relation}', required='')
-          if !user.hasOwnProperty('emergency_number')
-            input#inputUserBirth(type='text', placeholder='Numero', name='emergency_number', required='')
-          else
-            input#inputUserBirth(type='text', placeholder='Numero', name='emergency_number', value='#{user.emergency_number}', required='')
-          label Informacion Medica
-          if !user.hasOwnProperty('medicalPlan')
-            input#inputUserBilling(type='text', placeholder='Plan Medico', name='medicalPlan', required='')
-          else
-            input#inputUserBilling(type='text', placeholder='Plan Medico', name='medicalPlan', value='#{user.medicalPlan}', required='')
-          if !user.hasOwnProperty('primaryDoctor')
-            input#inputUserBilling(type='text', placeholder='Doctor primario', name='primaryDoctor', required='')
-          else
-            input#inputUserBilling(type='text', placeholder='Doctor primario', name='primaryDoctor', value='#{user.primaryDoctor}', required='')
+            input#inputUserAddress(type='text', placeholder='Calle 2', name='wstreet2', value='#{user.wstreet2}', required='')
           br
-          label Informacion de Cobro
-          if !user.hasOwnProperty('billing')
-            input#inputUserBilling(type='text', placeholder='Datos de Cobro', name='billing', required='')
+          if !user.hasOwnProperty('wcity')
+            input#inputUserAddress(type='text', placeholder='Ciudad', name='wcity', required='')
           else
-            input#inputUserBilling(type='text', placeholder='Datos de Cobro', name='billing', value='#{user.billing}', required='')
+            input#inputUserAddress(type='text', placeholder='Ciudad', name='wcity', value='#{user.wcity}', required='')
+
+          if !user.hasOwnProperty('wcountry')
+            input#inputUserAddress(type='text', placeholder='Pais', name='wcountry', required='')
+          else
+            input#inputUserAddress(type='text', placeholder='Pais', name='wcountry', value='#{user.wcountry}', required='')
+
+          if !user.hasOwnProperty('wzipcode')
+            input#inputUserAddress(type='text', placeholder='Codigo Postal', name='wzipcode', required='')
+          else
+            input#inputUserAddress(type='text', placeholder='Codigo Postal', name='wzipcode', value='#{user.wzipcode}', required='')
+          br
+          if !user.hasOwnProperty('email_oficina')
+            input#inputUserEmail(type='email', placeholder='Email Oficina', name='email_oficina', required='')
+          else
+            input#inputUserEmail(type='email', placeholder='Email Oficina', name='email_oficina', value='#{user.email_oficina}', required='')
+          br
+          input#inputUserName(type='text', placeholder='Licencia', name='license', , required='')
           br
           button(type='submit') Save Profile
-          
   if !user.firstTime
     a(href='/instructions') Instructions
     br
