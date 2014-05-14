@@ -123,8 +123,20 @@ router.get('/logout', function (req, res) {
 * GET User confirmation page. He gets here through email.
 */
 router.get('/userinfo', restrict, function(req, res) {
+  var db = req.db;
   console.log(req.session.user.email);
-  res.render('userinfo', {user: req.session.user});
+  db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.session.user._id)}, function(err, user) {
+    req.session.user = user;
+    if (!user.hasOwnProperty('type')){
+      res.render('user_supp', {user: req.session.user});
+    }
+    else if (user.type.localeCompare('supplier') === 0) {
+      res.render('suppinfo', {user: req.session.user});
+    }
+    else {
+      res.render('userinfo', {user: req.session.user}); 
+    };
+  });
 });
 
 /*
@@ -172,6 +184,17 @@ router.post('/setpass/:userid', function(req, res) {
       });
 
   });
+});
+
+router.post('/user_supp', restrict, function(req, res) { 
+  var db = req.db;
+  db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.session.user._id.toString())}, function(err, user) {
+    
+    db.collection('usercollection').update({_id: user._id}, {$set: {type: req.body.type}}, function(err) {
+      res.redirect('userinfo');
+    });
+  });
+
 });
 
 

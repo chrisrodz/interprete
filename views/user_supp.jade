@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 Are you a User or a Supplier?
+  h3 #{user.firstTime}
+
+  form(action='/users/user_supp', method='post')
+    label Usuario 
+      input#inputUserLanguage(type="radio", name="type", value="user", required='')
+    label Suplidor 
+      input#inputUserLanguage(type="radio", name="type", value="supplier", required='')
+    button.btn.btn-default(type='submit') Continue
+
+  if !user.firstTime
+    a(href='/instructions') Instructions
+    br
+    a(href='/reservations') Reservations
+          
+  
+
+block script
+  script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
