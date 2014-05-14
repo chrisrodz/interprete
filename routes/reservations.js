@@ -23,12 +23,14 @@ router.get('/', restrict, function(req, res) {
   });
 });
 
+// POST route for adding reservations.
 router.post('/add', restrict, function(req, res) {
   var db = req.db;
 
   var reservationInfo = req.body;
   reservationInfo.user_id = db.ObjectID.createFromHexString(req.session.user._id);
   reservationInfo.approved_by_admin = false;
+  reservationInfo.confirmed_by_user = false;
 
   var consumedHours = (Math.abs(moment(req.body.beginTime, "HH:mm a").diff(moment(req.body.endTime, "HH:mm a"))))/3600000;
 
@@ -58,6 +60,7 @@ router.post('/add', restrict, function(req, res) {
   };
 });
 
+// GET reservations 
 router.get('/get', restrict, function(req, res) {
   var db = req.db;
   db.collection('reservations').find({user_id: db.ObjectID.createFromHexString(req.session.user._id)}).toArray(function(err, items) {
@@ -65,10 +68,12 @@ router.get('/get', restrict, function(req, res) {
   });
 });
 
+// GET view to add passwords that give more hours.
 router.get('/add-password', restrict, function(req, res) {
   res.render('add_password', {user: req.session.user});
 });
 
+// POST view to add passwords that give more hours.
 router.post('/add-password', restrict, function(req, res) {
   var db = req.db;
   var pass = req.body.password;
@@ -93,6 +98,15 @@ router.post('/add-password', restrict, function(req, res) {
         };
       });
     };
+  });
+});
+
+// POST for users to confirm reservations after admin approves them
+router.get('/confirm-reservation/:reservid', function(req, res) {
+  var db = req.db;
+  db.collection('reservations').update({_id: db.ObjectID.createFromHexString(req.params.reservid.toString())}, {$set: {confirmed_by_user: true}}, function(err) {
+    if (err) {console.log(err)};
+    res.redirect('/reservations')
   });
 });
 
