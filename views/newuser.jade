@@ -8,14 +8,16 @@ block content
         h2 Add User
         #addUser
             form(action='', method='post')
-                input#inputUserName(type='text', placeholder='Nombre', name='name', , required='')
-                input#inputUserEmail(type='email', placeholder='Email', name='email', required='')
+                input.form-control#Name(type='text', placeholder='Nombre', name='name', , required='')
+                input.form-control#Email(type='email', placeholder='Email', name='email', required='')
                 h3 Escoja su lenguaje principal
-                label Español 
-                    input#inputUserLanguage(type="radio", name="language", value="spanish")
-                label Ingles 
-                    input#inputUserLanguage(type="radio", name="language", value="english")
-                button#btnLogin Login
+                label Español  
+                    input.form-control#Language(type="radio", name="language", value="spanish")
+                br
+                label Ingles  
+                    input.form-control#Language(type="radio", name="language", value="english")
+                br
+                button.btn.btn-success#btnLogin Login
         // /ADD USER
 
     // /WRAPPER

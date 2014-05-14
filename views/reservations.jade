@@ -1,7 +1,26 @@
 extends layout
 
 block content
-  h1 Reserve an interpreter
+  div.navbar.navbar-default(role="navigation")
+        div.container-fluid
+            div.navbar-header
+                button.navbar-toggle(type="button" data-toggle="collapse" data-target="#nav-links")
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                span.navbar-brand Reserve an Interpreter
+
+            div.navbar-collapse.collapse#nav-links
+                ul.nav.navbar-nav.navbar-right
+                  if !user.firstTime
+                    li
+                        a(href='/users/userinfo') Profile
+                    li
+                        a(href='/reservations/add-password') Get more hours
+                    li
+                        a(href='/instructions') Instructions
+
   h3#availableHours You have #{hours} hour(s) to make reservations
   if msg
     h3= msg
@@ -29,11 +48,6 @@ block content
           if reserv.confirmed_by_user
             | Link to video: 
             a(href='/video/#{reserv._id}') Test link.
-  a(href='/reservations/add-password') Get more hours
-  br
-  a(href='/users/userinfo') Profile
-  br
-  a(href='/instructions') Instructions
 
 block script
   script(src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')

@@ -1,106 +1,121 @@
 extends layout
 
 block content
-  h1 This is your profile
-  h3 #{user.firstTime}
+  div.navbar.navbar-default(role="navigation")
+    div.container-fluid
+        div.navbar-header
+            button.navbar-toggle(type="button" data-toggle="collapse" data-target="#nav-links")
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            span.navbar-brand User Profile
+
+        div.navbar-collapse.collapse#nav-links
+            ul.nav.navbar-nav.navbar-right
+              if !user.firstTime
+                li
+                  a(href='/instructions') Instructions
+                li
+                  a(href='/reservations') Reservations
   #profile
       form(action='', method='post')
           label Informacion General
           if !user.hasOwnProperty('name')
-            input#inputUserName(type='text', placeholder='Nombre', name='name', required='')
+            input.form-control#Name(type='text', placeholder='Nombre', name='name', required='')
           else
-            input#inputUserName(type='text', placeholder='Nombre', name='name', value='#{user.name}', required='')
+            input.form-control#Name(type='text', placeholder='Nombre', name='name', value='#{user.name}', required='')
 
           if !user.hasOwnProperty('flname')
-            input#inputUserFLName(type='text', placeholder='Apellido Paterno', name='flname', required='')
+            input.form-control#FLName(type='text', placeholder='Apellido Paterno', name='flname', required='')
           else
-            input#inputUserName(type='text', placeholder='Apellido Paterno', name='flname', value='#{user.flname}', required='')
+            input.form-control#Name(type='text', placeholder='Apellido Paterno', name='flname', value='#{user.flname}', required='')
 
           if !user.hasOwnProperty('mlname')
-            input#inputUserFLName(type='text', placeholder='Apellido Materno', name='mlname', required='')
+            input.form-control#FLName(type='text', placeholder='Apellido Materno', name='mlname', required='')
           else
-            input#inputUserName(type='text', placeholder='Apellido Materno', name='mlname', value='#{user.mlname}', required='')
+            input.form-control#Name(type='text', placeholder='Apellido Materno', name='mlname', value='#{user.mlname}', required='')
           br
           if !user.hasOwnProperty('birth')
-            input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', required='')
+            input.form-control#Birth(type='text', placeholder='Fecha de Nacimiento', name='birth', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Fecha de Nacimiento', name='birth', value='#{user.birth}', required='')
+            input.form-control#Birth(type='text', placeholder='Fecha de Nacimiento', name='birth', value='#{user.birth}', required='')
           if !user.hasOwnProperty('gender')
             label Hombre 
-              input#inputUserLanguage(type="radio", name="gender", value="male", required="")
+              input.form-control#Language(type="radio", name="gender", value="male", required="")
             label Mujer 
-              input#inputUserLanguage(type="radio", name="gender", value="female", required="")
+              input.form-control#Language(type="radio", name="gender", value="female", required="")
           else
             if user.gender === 'male'
               label Hombre 
-                input#inputUserLanguage(type="radio", name="gender", value="male", required="", checked)
+                input.form-control#Language(type="radio", name="gender", value="male", required="", checked)
               label Mujer 
-                input#inputUserLanguage(type="radio", name="gender", value="female", required="")
+                input.form-control#Language(type="radio", name="gender", value="female", required="")
             else
               label Hombre 
-                input#inputUserLanguage(type="radio", name="gender", value="male", required="")
+                input.form-control#Language(type="radio", name="gender", value="male", required="")
               label Mujer 
-                input#inputUserLanguage(type="radio", name="gender", value="female", required="", checked)
+                input.form-control#Language(type="radio", name="gender", value="female", required="", checked)
           br
           label Direccion Fisica
 
           if !user.hasOwnProperty('faddress1')
-            input#inputUserAddress(type='text', placeholder='Calle 1', name='faddress1', required='')
+            input.form-control#Address(type='text', placeholder='Calle 1', name='faddress1', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Calle 1', name='faddress1', value='#{user.faddress1}', required='')
+            input.form-control#Address(type='text', placeholder='Calle 1', name='faddress1', value='#{user.faddress1}', required='')
 
           if !user.hasOwnProperty('faddress2')
-            input#inputUserAddress(type='text', placeholder='Calle 2', name='faddress2', required='')
+            input.form-control#Address(type='text', placeholder='Calle 2', name='faddress2', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Calle 2', name='faddress2', value='#{user.faddress2}', required='')
+            input.form-control#Address(type='text', placeholder='Calle 2', name='faddress2', value='#{user.faddress2}', required='')
           br
           if !user.hasOwnProperty('city')
-            input#inputUserAddress(type='text', placeholder='Ciudad', name='city', required='')
+            input.form-control#Address(type='text', placeholder='Ciudad', name='city', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Ciudad', name='city', value='#{user.city}', required='')
+            input.form-control#Address(type='text', placeholder='Ciudad', name='city', value='#{user.city}', required='')
 
           if !user.hasOwnProperty('country')
-            input#inputUserAddress(type='text', placeholder='Pais', name='country', required='')
+            input.form-control#Address(type='text', placeholder='Pais', name='country', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Pais', name='country', value='#{user.country}', required='')
+            input.form-control#Address(type='text', placeholder='Pais', name='country', value='#{user.country}', required='')
 
           if !user.hasOwnProperty('zipcode')
-            input#inputUserAddress(type='text', placeholder='Codigo Postal', name='zipcode', required='')
+            input.form-control#Address(type='text', placeholder='Codigo Postal', name='zipcode', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Codigo Postal', name='zipcode', value='#{user.zipcode}', required='')
+            input.form-control#Address(type='text', placeholder='Codigo Postal', name='zipcode', value='#{user.zipcode}', required='')
           br
           label Direccion Postal
 
           if !user.hasOwnProperty('paddress1')
-            input#inputUserAddress(type='text', placeholder='Calle 1', name='paddress1', required='')
+            input.form-control#Address(type='text', placeholder='Calle 1', name='paddress1', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Calle 1', name='paddress1', value='#{user.paddress1}', required='')
+            input.form-control#Address(type='text', placeholder='Calle 1', name='paddress1', value='#{user.paddress1}', required='')
 
           if !user.hasOwnProperty('paddress2')
-            input#inputUserAddress(type='text', placeholder='Calle 2', name='paddress2', required='')
+            input.form-control#Address(type='text', placeholder='Calle 2', name='paddress2', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Calle 2', name='paddress2', value='#{user.paddress2}', required='')
+            input.form-control#Address(type='text', placeholder='Calle 2', name='paddress2', value='#{user.paddress2}', required='')
           br
           if !user.hasOwnProperty('pcity')
-            input#inputUserAddress(type='text', placeholder='Ciudad', name='pcity', required='')
+            input.form-control#Address(type='text', placeholder='Ciudad', name='pcity', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Ciudad', name='pcity', value='#{user.pcity}', required='')
+            input.form-control#Address(type='text', placeholder='Ciudad', name='pcity', value='#{user.pcity}', required='')
 
           if !user.hasOwnProperty('pcountry')
-            input#inputUserAddress(type='text', placeholder='Pais', name='pcountry', required='')
+            input.form-control#Address(type='text', placeholder='Pais', name='pcountry', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Pais', name='pcountry', value='#{user.pcountry}', required='')
+            input.form-control#Address(type='text', placeholder='Pais', name='pcountry', value='#{user.pcountry}', required='')
 
           if !user.hasOwnProperty('pzipcode')
-            input#inputUserAddress(type='text', placeholder='Codigo Postal', name='pzipcode', required='')
+            input.form-control#Address(type='text', placeholder='Codigo Postal', name='pzipcode', required='')
           else
-            input#inputUserAddress(type='text', placeholder='Codigo Postal', name='pzipcode', value='#{user.pzipcode}', required='')
+            input.form-control#Address(type='text', placeholder='Codigo Postal', name='pzipcode', value='#{user.pzipcode}', required='')
           br
           label Informacion de Contacto
           if !user.hasOwnProperty('phoneNumber')
-            input#inputUserBirth(type='text', placeholder='Numero de Telefono', name='phoneNumber', required='')
+            input.form-control#Birth(type='text', placeholder='Numero de Telefono', name='phoneNumber', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Numero de Telefono', name='phoneNumber', value='#{user.phoneNumber}', required='')
+            input.form-control#Birth(type='text', placeholder='Numero de Telefono', name='phoneNumber', value='#{user.phoneNumber}', required='')
 
           if !user.hasOwnProperty('phoneProvider')
             label Proveedor de Telefono 
@@ -132,50 +147,46 @@ block content
 
           label Informacion de Trabajo
           if !user.hasOwnProperty('workPhone')
-            input#inputUserBirth(type='text', placeholder='Numero de Trabajo', name='workPhone', required='')
+            input.form-control#Birth(type='text', placeholder='Numero de Trabajo', name='workPhone', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Numero de Telefono', name='workPhone', value='#{user.workPhone}', required='')
+            input.form-control#Birth(type='text', placeholder='Numero de Telefono', name='workPhone', value='#{user.workPhone}', required='')
 
           if !user.hasOwnProperty('workPlace')
-            input#inputUserBirth(type='text', placeholder='Lugar de Trabajo', name='workPlace', required='')
+            input.form-control#Birth(type='text', placeholder='Lugar de Trabajo', name='workPlace', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Lugar de Telefono', name='workPlace', value='#{user.workPlace}', required='')
+            input.form-control#Birth(type='text', placeholder='Lugar de Telefono', name='workPlace', value='#{user.workPlace}', required='')
           br
           label Contacto de Emergencia
           if !user.hasOwnProperty('emergency_name')
-            input#inputUserBirth(type='text', placeholder='Nombre', name='emergency_name', required='')
+            input.form-control#Birth(type='text', placeholder='Nombre', name='emergency_name', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Nombre', name='emergency_name', value='#{user.emergency_name}', required='')
+            input.form-control#Birth(type='text', placeholder='Nombre', name='emergency_name', value='#{user.emergency_name}', required='')
           if !user.hasOwnProperty('emergency_relation')
-            input#inputUserBirth(type='text', placeholder='Parentesco', name='emergency_relation', required='')
+            input.form-control#Birth(type='text', placeholder='Parentesco', name='emergency_relation', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Parentesco', name='emergency_relation', value='#{user.emergency_relation}', required='')
+            input.form-control#Birth(type='text', placeholder='Parentesco', name='emergency_relation', value='#{user.emergency_relation}', required='')
           if !user.hasOwnProperty('emergency_number')
-            input#inputUserBirth(type='text', placeholder='Numero', name='emergency_number', required='')
+            input.form-control#Birth(type='text', placeholder='Numero', name='emergency_number', required='')
           else
-            input#inputUserBirth(type='text', placeholder='Numero', name='emergency_number', value='#{user.emergency_number}', required='')
+            input.form-control#Birth(type='text', placeholder='Numero', name='emergency_number', value='#{user.emergency_number}', required='')
           label Informacion Medica
           if !user.hasOwnProperty('medicalPlan')
-            input#inputUserBilling(type='text', placeholder='Plan Medico', name='medicalPlan', required='')
+            input.form-control#Billing(type='text', placeholder='Plan Medico', name='medicalPlan', required='')
           else
-            input#inputUserBilling(type='text', placeholder='Plan Medico', name='medicalPlan', value='#{user.medicalPlan}', required='')
+            input.form-control#Billing(type='text', placeholder='Plan Medico', name='medicalPlan', value='#{user.medicalPlan}', required='')
           if !user.hasOwnProperty('primaryDoctor')
-            input#inputUserBilling(type='text', placeholder='Doctor primario', name='primaryDoctor', required='')
+            input.form-control#Billing(type='text', placeholder='Doctor primario', name='primaryDoctor', required='')
           else
-            input#inputUserBilling(type='text', placeholder='Doctor primario', name='primaryDoctor', value='#{user.primaryDoctor}', required='')
+            input.form-control#Billing(type='text', placeholder='Doctor primario', name='primaryDoctor', value='#{user.primaryDoctor}', required='')
           br
           label Informacion de Cobro
           if !user.hasOwnProperty('billing')
-            input#inputUserBilling(type='text', placeholder='Datos de Cobro', name='billing', required='')
+            input.form-control#Billing(type='text', placeholder='Datos de Cobro', name='billing', required='')
           else
-            input#inputUserBilling(type='text', placeholder='Datos de Cobro', name='billing', value='#{user.billing}', required='')
+            input.form-control#Billing(type='text', placeholder='Datos de Cobro', name='billing', value='#{user.billing}', required='')
           br
-          button(type='submit') Save Profile
+          button.btn.btn-success(type='submit') Save Profile
           
-  if !user.firstTime
-    a(href='/instructions') Instructions
-    br
-    a(href='/reservations') Reservations
           
   
 

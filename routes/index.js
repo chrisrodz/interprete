@@ -11,7 +11,7 @@ function restrict (req, res, next) {
 
 /* GET home page. */
 router.get('/', restrict, function(req, res) {
-  res.render('index', { title: 'Express' });
+  res.redirect('/instructions');
 });
 
 module.exports = router;

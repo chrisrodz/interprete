@@ -11,3 +11,9 @@ iframe {
   position: relative;
   z-index: 1!important;
 }
+
+.form-control{
+
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
