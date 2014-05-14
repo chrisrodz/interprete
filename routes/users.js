@@ -134,7 +134,7 @@ router.get('/userinfo', restrict, function(req, res) {
     if (!user.hasOwnProperty('type')){
       res.render('user_supp', {user: req.session.user});
     }
-    else if (user.type.localeCompare('supplier') === 0) {
+    else if (user.type === 'supplier') {
       res.render('suppinfo', {user: req.session.user});
     }
     else {
@@ -148,7 +148,15 @@ router.get('/userinfo', restrict, function(req, res) {
 */
 router.post('/userinfo', restrict, function(req, res) {
   var db = req.db;
-  db.collection('usercollection').update({_id: db.ObjectID.createFromHexString(req.session.user._id)}, {$set: {name: req.body.name, address: req.body.address, birth: req.body.birth, gender: req.body.gender, billing: req.body.billing} }, function(err) {
+  req.body._id = db.ObjectID.createFromHexString(req.session.user._id.toString());
+  req.body.accountIsActive = req.session.user.accountIsActive;
+  req.body.availableHours = req.session.user.availableHours;
+  req.body.firstTime = req.session.user.firstTime;
+  req.body.password = req.session.user.password;
+  req.body.salt = req.session.user.salt;
+  req.body.type = req.session.user.type;
+  req.body.language = req.session.user.language;
+  db.collection('usercollection').save(req.body, function(err) {
     if (err) {console.log(err)};
     db.collection('usercollection').findOne({_id: db.ObjectID.createFromHexString(req.session.user._id)}, function(err, user) {
       req.session.user = user;
@@ -158,7 +166,7 @@ router.post('/userinfo', restrict, function(req, res) {
         });
       }
       else{
-        res.render('userinfo', {user: req.session.user});
+          res.redirect('/users/userinfo');
       }
       //res.render('userinfo', {user: req.session.user});
     });

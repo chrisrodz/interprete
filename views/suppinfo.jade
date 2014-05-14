@@ -186,7 +186,10 @@ block content
           else
             input#inputUserEmail(type='email', placeholder='Email Oficina', name='email_oficina', value='#{user.email_oficina}', required='')
           br
-          input#inputUserName(type='text', placeholder='Licencia', name='license', , required='')
+          if !user.hasOwnProperty('license')
+            input#inputUserName(type='text', placeholder='Licencia', name='license',required='')
+          else
+            input#inputUserName(type='text', placeholder='Licencia', name='license', value='#{user.license}', required='')
           br
           button(type='submit') Save Profile
   if !user.firstTime
