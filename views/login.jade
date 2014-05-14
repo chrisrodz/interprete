@@ -1,19 +1,16 @@
 extends layout
 
 block content
-    h1 Login
-
-    // Wrapper
-    #wrapper
-        if msg
-            h2= msg
-        // LOGIN
-        h2 Give me your info!
-        #addUser
-            form(action='', method='post')
-                input#inputUserEmail(type='email', placeholder='Email', name='email')
-                input#inputUserPass(type='password', placeholder='Password', name='password')
-                button#btnLogin Login
-        // /LOGIN
-
-    // /WRAPPER
+    div.jumbotron
+        h1 Login
+        p.lead Dive into the future of interpreting!
+        #wrapper
+            if msg
+                h2= msg
+            // LOGIN
+            h2 Give me your info!
+            #addUser
+                form(action='', method='post')
+                    input.form-control#inputUserEmail(type='email', placeholder='Email', name='email')
+                    input.form-control#inputUserPass(type='password', placeholder='Password', name='password')
+                    button.btn.btn-success#btnLogin Login
