@@ -1,7 +1,7 @@
 interprete
 ==========
 
-Interpreters as a service. Client project for pixeldigital
+Test Node.js app with video chat.
 
 Installation
 ===========
